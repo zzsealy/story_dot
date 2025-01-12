@@ -1,0 +1,48 @@
+/front/.env.local
+/front/.env.production
+/backend/venv
+*sqlite3
+*.pyc
+/.vscode
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+front/node_modules
+front/.pnp
+front/.pnp.*
+front/.yarn/*
+front/!.yarn/patches
+front/!.yarn/plugins
+front/!.yarn/releases
+front/!.yarn/versions
+
+front/# testing
+front//coverage
+
+front/# next.js
+front/.next/
+front/out/
+
+front/# production
+front/build
+
+front/# misc
+front/.DS_Store
+front/*.pem
+
+front/# debug
+front/npm-debug.log*
+front/yarn-debug.log*
+front/yarn-error.log*
+front/.pnpm-debug.log*
+
+front/# env files (can opt-in for committing if needed)
+front/.env*
+
+front/# vercel
+front/.vercel
+
+front/# typescript
+front/*.tsbuildinfo
+front/next-env.d.ts
