@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2017", // 可以保留，指定了编译后目标的 ECMAScript 版本
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // 包含了 ESNext 和 DOM 类型
+    "allowJs": true, // 允许将 JavaScript 文件包含在 TypeScript 项目中
+    "skipLibCheck": true, // 跳过库文件的类型检查，减少编译时间
+    "strict": true, // 开启严格模式，确保类型检查更加严格
+    "noEmit": true, // 不输出编译结果，因为 Next.js 会自行处理
+    "esModuleInterop": true, // 启用 esModuleInterop 以支持 CommonJS 模块
+    "module": "esnext", // 使用 ES 模块标准（Next.js 支持 esnext）
+    "moduleResolution": "node", // 使用 Node.js 模块解析方式
+    "resolveJsonModule": true, // 允许导入 JSON 文件
+    "isolatedModules": true, // 每个文件都作为独立的模块处理
+    "jsx": "preserve", // 使用新的 JSX 转换方式（React 17+ 的默认方式）
+    "incremental": true, // 启用增量编译
+    "plugins": [
+      {
+        "name": "next" // 用于 Next.js 的插件，确保项目运行正常
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ] // 支持使用 @ 路径别名，指向项目根目录
+    }
+  },
+  "include": [
+    "next-env.d.ts", // 包含 Next.js 环境声明文件
+    "**/*.ts", // 包含所有 TypeScript 文件
+    "**/*.tsx", // 包含所有 TypeScript JSX 文件
+    ".next/types/**/*.ts" // 包含 Next.js 编译生成的类型文件
+  ],
+  "exclude": [
+    "node_modules" // 排除掉 node_modules 文件夹
+  ]
+}
