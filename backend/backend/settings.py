@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'corsheaders',
     'apps.user',
     'apps.quiz'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,6 +120,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+try:
+    CORS_ALLOWED_ORIGINS.append('http://localhost:3000')
+except Exception as e:
+    CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
+      
 
 
 # Static files (CSS, JavaScript, Images)

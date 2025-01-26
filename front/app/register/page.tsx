@@ -27,14 +27,15 @@ const Register = () => {
     }
 
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        const registerUrl = `${process.env.NEXT_PUBLIC_API_URL}/users/register`
-        const registerData = {'email': values.username, 'password': values.password, 'passwordRepeat': values.passwordRepeat, 'name': values.name}
+        const registerUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`
+        const registerData = {'email': values.username, 'password': values.password, 'password_repeat': values.passwordRepeat, 'nick_name': values.name}
         // notificationApi: 一个对象，包含了调用通知相关方法的接口，例如 api.info
         // contextHolder: 一个react组件, 必须放在组件树中，它会渲染一个容器，用于显示通知
         // Context 是 React 的上下文 API（Context API）的一部分，用于在组件树中传递数据，而无需通过 props 一层层地传递。你可以将它理解为一个全局的数据存储容器，里面的值可以被任何组件访问。
         //   const Context = React.createContext({ name: 'Default' });
         api.post(registerUrl, registerData)
         .then((res) => {
+          debugger;
             const status_code = res.data.status_code;
             if (status_code === 200){
                 router.push('/login')
