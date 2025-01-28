@@ -1,75 +1,98 @@
 'use client';
 import React from 'react';
-import type { FormProps } from 'antd';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation'
-import { Form, Button, Input, notification } from 'antd'
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
 
 import api from '../../utils/axios';
 
-type FieldType = {
-    username?: string;
-    password?: string;
-    passwordRepeat?: string;
-    name?: string;
+interface FormValues {
+  nick_name: string;
+  email: string;
+  password: string;
+  repeat_password: string
 }
 
+const RegisterForm: React.FC = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const router = useRouter()
+
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
+
+    const registerUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`
+    const registerData = {'email': values.email, 'password': values.password, 'password_repeat': values.repeat_password, 'nick_name': values.nick_name}
+    // notificationApi: 一个对象，包含了调用通知相关方法的接口，例如 api.info
+    // contextHolder: 一个react组件, 必须放在组件树中，它会渲染一个容器，用于显示通知
+    // Context 是 React 的上下文 API（Context API）的一部分，用于在组件树中传递数据，而无需通过 props 一层层地传递。你可以将它理解为一个全局的数据存储容器，里面的值可以被任何组件访问。
+    //   const Context = React.createContext({ name: 'Default' });
+    api.post(registerUrl, registerData)
+    .then((res) => {
+      debugger;
+        const status_code = res.data.status_code;
+        if (status_code === 200){
+            router.push('/login')
+        } else {
+        }
+    })
+    console.log('Form Submitted:', values);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <Label htmlFor="nick_name">昵称</Label>
+        <Input
+          id="nick_name"
+          {...register('nick_name', { required: 'Username is required' })}
+        />
+        {errors.nick_name && <span className="text-red-500">{errors.nick_name.message}</span>}
+      </div>
+
+      <div>
+        <Label htmlFor="email">邮箱</Label>
+        <Input
+          id="email"
+          type="email"
+          {...register('email', { required: 'Email is required' })}
+        />
+        {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+      </div>
+
+      <div>
+        <Label htmlFor="password">密码</Label>
+        <Input
+          id="password"
+          type="password"
+          {...register('password', { required: 'Password is required' })}
+        />
+        {errors.password && <span className="text-red-500">{errors.password.message}</span>}
+      </div>
+      <div>
+        <Label htmlFor="password">重复密码</Label>
+        <Input
+          id="password"
+          type="password"
+          {...register('repeat_password', { required: 'Password is required' })}
+        />
+        {errors.repeat_password && <span className="text-red-500">{errors.repeat_password.message}</span>}
+      </div>
+
+      <Button type="submit">注册</Button>
+    </form>
+  );
+};
 
 
 
 const Register = () => {
-    const router = useRouter()
-    const [notificationApi, contextHolder] = notification.useNotification();
-    const openNotification = (notificationMessage: string) => {
-        notificationApi.info({
-            message: notificationMessage,
-            placement: 'topRight'
-        })
-    }
-
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        const registerUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/register`
-        const registerData = {'email': values.username, 'password': values.password, 'password_repeat': values.passwordRepeat, 'nick_name': values.name}
-        // notificationApi: 一个对象，包含了调用通知相关方法的接口，例如 api.info
-        // contextHolder: 一个react组件, 必须放在组件树中，它会渲染一个容器，用于显示通知
-        // Context 是 React 的上下文 API（Context API）的一部分，用于在组件树中传递数据，而无需通过 props 一层层地传递。你可以将它理解为一个全局的数据存储容器，里面的值可以被任何组件访问。
-        //   const Context = React.createContext({ name: 'Default' });
-        api.post(registerUrl, registerData)
-        .then((res) => {
-          debugger;
-            const status_code = res.data.status_code;
-            if (status_code === 200){
-                router.push('/login')
-            } else {
-                openNotification(res.data.message)
-            }
-        })
-        console.log('Form Submitted:', values);
-    };
 
   return (
     <div className='flex items-center justify-center h-screen bg-gray-100'>
-    <Form onFinish={onFinish}
-        labelCol={{ span: 6}}
-        wrapperCol={{ span: 14 }}>
-      <Form.Item label="邮箱" name="username">
-        <Input />
-      </Form.Item>
-      <Form.Item label="昵称" name="name">
-        <Input />
-      </Form.Item>
-      <Form.Item label="密码" name="password">
-        <Input.Password />
-      </Form.Item>
-      <Form.Item label="重复密码" name="passwordRepeat">
-        <Input.Password />
-      </Form.Item>
-      <Form.Item wrapperCol={{ span: 14, offset: 6}}>
-        <Button type="primary" htmlType="submit">
-          注册
-        </Button>
-      </Form.Item>
-    </Form>
-    {contextHolder}
+    <RegisterForm />
     </div>
   )
 }
