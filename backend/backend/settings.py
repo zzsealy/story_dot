@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'corsheaders',
+    'captcha',
     'apps.user',
     'apps.quiz'
 ]
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.handler_middleware.Middleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -127,6 +129,7 @@ except Exception as e:
     CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
       
 
+TOKEN_AGE = 10
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -138,3 +141,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
+
+AUTHENTICATION_SKIP_URL = {
+     '/api/user/register': ['POST'],
+     '/api/user/login': ['POST'],
+     '/api/docs': ['GET'],
+     '/api/openapi.json': ['GET'],
+     '/api/user/get_captcha': ['GET'],
+     '/captcha.image/': ['GET'],
+     '/api/user/validate_captcha': ['POST']
+}

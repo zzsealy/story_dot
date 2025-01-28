@@ -1,5 +1,8 @@
 from ninja import Router, Schema, ModelSchema, Field
 
+from .captcha_view import get_register_ver_code_pass_cache_key
+from utils.cache import cache
+
 router = Router()
 
 """
@@ -18,7 +21,14 @@ class RegisterSchema(Schema):
 
 @router.post('/register', response=RegisterOut)
 def register(request, payload: RegisterSchema):
-    return {'status_code': 200, 'message': '注册成功', 'user_id': 1}
+    ip = request.META.get('REMOTE_ADDR')
+    is_valid_ver_code = cache.get(get_register_ver_code_pass_cache_key(ip))
+    if is_valid_ver_code:
+        cache.delete(get_register_ver_code_pass_cache_key(ip))
+        return {'status_code': 200, 'message': '注册成功', 'user_id': 1}
+    else:
+        return {'status_code': 400, 'message': '请进行人际验证', 'user_id': 1}
+
 
 """
 登录 

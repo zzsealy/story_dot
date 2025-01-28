@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Captcha from '../components/captcha';
 
 
 import api from '../../utils/axios';
@@ -81,7 +82,7 @@ const RegisterForm: React.FC = () => {
         {errors.repeat_password && <span className="text-red-500">{errors.repeat_password.message}</span>}
       </div>
 
-      <Button type="submit">注册</Button>
+      <Button type="submit" className='bg-green-400'>注册</Button>
     </form>
   );
 };
@@ -91,8 +92,14 @@ const RegisterForm: React.FC = () => {
 const Register = () => {
 
   return (
-    <div className='flex items-center justify-center h-screen bg-gray-100'>
-    <RegisterForm />
+    <div className='flex items-center justify-center h-screen bg-gray-100 flex-col'>
+      <div className='flex flex-col space-y-4 w-full max-w-md px-8 py-6 bg-white rounded-lg shadow-md'>
+
+      <div className='mb-4'>
+        <Captcha />
+      </div>
+      <RegisterForm />
+      </div>
     </div>
   )
 }
