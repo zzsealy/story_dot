@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import Captcha from '../components/captcha';
+import CaptchaForm from '../components/captchaForm';
 
 
 import api from '../../utils/axios';
@@ -96,7 +96,7 @@ const Register = () => {
       <div className='flex flex-col space-y-4 w-full max-w-md px-8 py-6 bg-white rounded-lg shadow-md'>
 
       <div className='mb-4'>
-        <Captcha />
+        <CaptchaForm />
       </div>
       <RegisterForm />
       </div>
