@@ -1,6 +1,6 @@
 /front/.env.local
 /front/.env.production
-venv
+backend/venv
 *sqlite3
 *.pyc
 /.vscode

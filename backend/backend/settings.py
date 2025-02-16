@@ -149,5 +149,6 @@ AUTHENTICATION_SKIP_URL = {
      '/api/openapi.json': ['GET'],
      '/api/user/get_captcha': ['GET'],
      '/captcha.image/': ['GET'],
-     '/api/user/validate_captcha': ['POST']
+     '/api/user/validate_captcha': ['POST'],
+     '/api/user/valid_email_code': ['POST']
 }

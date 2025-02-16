@@ -9,6 +9,7 @@ class User(AbstractUser):
     password = models.CharField(help_text='密码', max_length=100)
     nick_name = models.CharField(help_text='昵称', max_length=100)
     create_datetime = models.DateTimeField(auto_now_add=True, help_text='创建时间')
+    status = models.SmallIntegerField(default=0, help_text='0: 只是提交, 1: 注册成功, 验证通过')
 
     class Meta:
         db_table = 'user'

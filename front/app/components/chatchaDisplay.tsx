@@ -15,7 +15,6 @@ const CaptchaDisplay: React.FC<CaptchaDisplayProps> = ({onCaptchaChange}) => {
           .then((res) => {
             const status_code = res.data.status_code
             if(status_code === 200){
-                debugger;
                 const captchaUrl = `${process.env.NEXT_PUBLIC_API_URL}${res.data.captcha_url}`
                 setCaptchaImage(captchaUrl)
                 onCaptchaChange(res.data.captcha_key) // 调用回调函数来通知父组件

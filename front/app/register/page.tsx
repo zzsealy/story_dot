@@ -32,7 +32,6 @@ const RegisterForm: React.FC = () => {
     //   const Context = React.createContext({ name: 'Default' });
     api.post(registerUrl, registerData)
     .then((res) => {
-      debugger;
         const status_code = res.data.status_code;
         if (status_code === 200){
             router.push('/login')
@@ -95,9 +94,9 @@ const Register = () => {
     <div className='flex items-center justify-center h-screen bg-gray-100 flex-col'>
       <div className='flex flex-col space-y-4 w-full max-w-md px-8 py-6 bg-white rounded-lg shadow-md'>
 
-      <div className='mb-4'>
+      {/* <div className='mb-4'>
         <CaptchaForm />
-      </div>
+      </div> */}
       <RegisterForm />
       </div>
     </div>

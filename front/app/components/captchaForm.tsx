@@ -15,7 +15,6 @@ const CaptchaForm: React.FC = () => {
     const [captchaKey, setCaptchaKey] = useState('')
 
     const onSubmit: SubmitHandler<FormValues> = (values) => {
-      debugger;
 
         axios.post(validateCaptchaUrl, {'captcha_key': captchaKey, 'ver_code': values.ver_code})
           .then((res) => {

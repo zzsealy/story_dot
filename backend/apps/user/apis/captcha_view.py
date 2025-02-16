@@ -9,7 +9,7 @@ router = Router()
 def get_register_ver_code_pass_cache_key(ip):
     return f'{ip}|register_ver_code_pass'
 
-# 获取验证码
+# 获取人机验证码
 class GetCaptchaOut(Schema):
     status_code: int
     captcha_key: str
