@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'corsheaders',
-    'captcha',
-    'apps.user',
+    # 'captcha',
+    'apps.quiz_user',
     'apps.quiz'
 ]
 
@@ -117,7 +117,7 @@ for model_file in all_apps_fold:
 
 LANGUAGE_CODE = 'en-us'
 
-# USE_TZ = True
+USE_TZ = False
 TIME_ZONE = 'Asia/Shanghai' 
 
 USE_I18N = True
@@ -140,7 +140,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'quiz_user.QuizUser'
 
 AUTHENTICATION_SKIP_URL = {
      '/api/user/register': ['POST'],

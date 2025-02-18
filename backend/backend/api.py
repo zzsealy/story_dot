@@ -1,5 +1,5 @@
 from ninja import NinjaAPI, Schema, Router
-from apps.user.router import user_router
+from apps.quiz_user.router import user_router
 
 api = NinjaAPI()
 

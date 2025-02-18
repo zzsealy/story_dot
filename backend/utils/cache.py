@@ -129,6 +129,7 @@ class RedisHelper:
             password=password,
             db=db,
             decode_responses=True,
+            ssl=True
         )
         if self.redis.ping():
             print('连接redis成功')
