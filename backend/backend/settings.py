@@ -117,11 +117,11 @@ for model_file in all_apps_fold:
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# USE_TZ = True
+TIME_ZONE = 'Asia/Shanghai' 
 
 USE_I18N = True
 
-USE_TZ = True
 
 try:
     CORS_ALLOWED_ORIGINS.append('http://localhost:3000')

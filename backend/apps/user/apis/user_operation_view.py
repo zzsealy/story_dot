@@ -1,7 +1,9 @@
 import random
 import asyncio
+from datetime import datetime
 
 from django.core import signing
+from django.db import IntegrityError
 from asgiref.sync import sync_to_async
 
 from utils.cache import cache
@@ -28,10 +30,13 @@ class RegisterSchema(Schema):
 
 @sync_to_async
 def save_user(user):
-    user.save()
+    try:
+        user.save()
+    except Exception as e:
+        print(e)
 
 @router.post('/register', response=RegisterOut)
-async def register(request, payload: RegisterSchema):
+def register(request, payload: RegisterSchema):
     # ip = request.META.get('REMOTE_ADDR')
     # 注释验证码 采用发送邮箱的方式
     # is_valid_ver_code = cache.get(get_register_ver_code_pass_cache_key(ip))
@@ -42,15 +47,21 @@ async def register(request, payload: RegisterSchema):
     if password != password_repeat:
         return {'status_code': 500, 'message': '两次密码输入不一致，请重新输入'}
     email = payload.email
+    exist_user = user_dal.get_one_by_condition(condition={'username': email})
+    if exist_user:
+        return {'status_code': 500, 'message': '邮箱已经存在'}
+    if '@' not in email:
+        return {'status_code': 500, 'message': '请输入邮箱'}
+
     ver_code = random.randint(100000, 999999)
     send_email_result = send_email(to_email=email, email_domain_prefix="onboarding", title='感谢注册', message=f'您的注册码是:{str(ver_code)}')
     if send_email_result:
-        await cache.set(key=get_email_cache_key(email=email, type='register'), value=ver_code, timeout=600)
+        cache.set(key=get_email_cache_key(email=email, type='register'), value=ver_code, timeout=600)
         email_signed = signing.dumps({'email': email})
         print(email_signed)
-        user = user_dal.model(nick_name=payload.nick_name, email=email)
+        user = user_dal.model(nick_name=payload.nick_name, username=email, create_datetime=datetime.now())
         user.set_password(payload.password)
-        await save_user(user)
+        user.save()
         return {'status_code': 200, 'message': '提交注册成功', 'email_signed': email_signed}
     return {'status_code': 400, 'message': '发生错误'}
 
