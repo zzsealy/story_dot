@@ -1,16 +1,11 @@
 import random
 import asyncio
-from django.utils import timezone
-
-from django.core import signing
-from django.db import IntegrityError
+from datetime import datetime
 from asgiref.sync import sync_to_async
 
 from django.core.cache import cache
 from utils.email_utils import send_email, get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
-from .captcha_view import get_register_ver_code_pass_cache_key
-from apps.user.user_dal import user_dal
 # from .captcha_view import get_register_ver_code_pass_cache_key
 from apps.quiz_user.quiz_user_dal import quiz_user_dal
 
@@ -58,7 +53,7 @@ def register(request, payload: RegisterSchema):
         return {'status_code':500, 'message':'验证码错误请重新输入'}
     else:
         cache.delete(get_email_cache_key(email, type='register'))
-        user = user_dal.model(username=email, create_datetime=datetime.now())
+        user = quiz_user_dal.model(username=email, create_datetime=datetime.now())
         user.set_password(payload.password)
         user.save()
         return {'status_code': 200, 'message': '提交注册成功'}
