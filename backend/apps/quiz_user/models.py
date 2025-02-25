@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-class User(AbstractUser):
+class QuizUser(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -16,6 +16,6 @@ class User(AbstractUser):
     create_datetime = models.DateTimeField(auto_now_add=True, help_text='创建时间')
 
     class Meta:
-        db_table = 'user'
+        db_table = 'quiz_user'
 
 

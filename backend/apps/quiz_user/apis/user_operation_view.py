@@ -1,6 +1,6 @@
 import random
 import asyncio
-from datetime import datetime
+from django.utils import timezone
 
 from django.core import signing
 from django.db import IntegrityError
@@ -11,6 +11,9 @@ from utils.email_utils import send_email, get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
 from .captcha_view import get_register_ver_code_pass_cache_key
 from apps.user.user_dal import user_dal
+# from .captcha_view import get_register_ver_code_pass_cache_key
+from apps.quiz_user.quiz_user_dal import quiz_user_dal
+
 router = Router()
 
 """
@@ -39,7 +42,7 @@ def register(request, payload: RegisterSchema):
     if password != password_repeat:
         return {'status_code': 500, 'message': '两次密码输入不一致，请重新输入'}
     email = payload.email
-    exist_user = user_dal.get_one_by_condition(condition={'username': email})
+    exist_user = quiz_user_dal.get_one_by_condition(condition={'username': email})
     if exist_user:
         return {'status_code': 500, 'message': '邮箱已经存在'}
     if '@' not in email:
