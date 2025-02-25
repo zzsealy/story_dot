@@ -4,6 +4,7 @@ import './globals.css';  // 引入全局样式
 import { Inter } from 'next/font/google';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Toaster } from 'sonner';
 // import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
      <html lang="en">
     <body className={inter.className}>
+      <Toaster position='top-right' />
       <header className="bg-white-800 text-teal-400">
       <nav className="container mx-auto flex items-center justify-between py-4 px-4">
         {/* Logo or Website Name */}

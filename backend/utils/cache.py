@@ -200,6 +200,6 @@ class RedisHelper:
 
 # 使用示例
 # sync_cache = SyncRedisHelper(host=settings.REDIS_HOST, password=settings.REDIS_PASSWORD, port=settings.REDIS_PORT, db=0)
-cache = RedisHelper(host=settings.REDIS_HOST, password=settings.REDIS_PASSWORD, port=settings.REDIS_PORT, db=0)
+# cache = RedisHelper(host=settings.REDIS_HOST, password=settings.REDIS_PASSWORD, port=settings.REDIS_PORT, db=0)
 
 

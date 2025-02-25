@@ -6,12 +6,11 @@ from django.core import signing
 from django.db import IntegrityError
 from asgiref.sync import sync_to_async
 
-from utils.cache import cache
+from django.core.cache import cache
 from utils.email_utils import send_email, get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
 from .captcha_view import get_register_ver_code_pass_cache_key
 from apps.user.user_dal import user_dal
-
 router = Router()
 
 """
@@ -20,20 +19,13 @@ router = Router()
 class RegisterOut(Schema):
     status_code: int
     message: str
-    email_signed: str = None
 
 class RegisterSchema(Schema):
     email: str = Field(description='邮箱')
-    nick_name: str = Field(description='昵称')
     password: str = Field(description='密码')
     password_repeat: str = Field(description='重复密码')
+    ver_code: int = Field(description='邮箱验证码')
 
-@sync_to_async
-def save_user(user):
-    try:
-        user.save()
-    except Exception as e:
-        print(e)
 
 @router.post('/register', response=RegisterOut)
 def register(request, payload: RegisterSchema):
@@ -51,19 +43,22 @@ def register(request, payload: RegisterSchema):
     if exist_user:
         return {'status_code': 500, 'message': '邮箱已经存在'}
     if '@' not in email:
-        return {'status_code': 500, 'message': '请输入邮箱'}
+        return {'status_code': 500, 'message': '邮箱格式不正确, 请重新输入'}
+    
 
-    ver_code = random.randint(100000, 999999)
-    send_email_result = send_email(to_email=email, email_domain_prefix="onboarding", title='感谢注册', message=f'您的注册码是:{str(ver_code)}')
-    if send_email_result:
-        cache.set(key=get_email_cache_key(email=email, type='register'), value=ver_code, timeout=600)
-        email_signed = signing.dumps({'email': email})
-        print(email_signed)
-        user = user_dal.model(nick_name=payload.nick_name, username=email, create_datetime=datetime.now())
+    email = payload.email
+    cache_code = cache.get(get_email_cache_key(email=email, type='register'))
+    if cache_code is None:
+        return {'status_code': 500, 'message':'验证码不存在，请重新发验证码'}
+    input_code = payload.ver_code
+    if cache_code != input_code:
+        return {'status_code':500, 'message':'验证码错误请重新输入'}
+    else:
+        cache.delete(get_email_cache_key(email, type='register'))
+        user = user_dal.model(username=email, create_datetime=datetime.now())
         user.set_password(payload.password)
         user.save()
-        return {'status_code': 200, 'message': '提交注册成功', 'email_signed': email_signed}
-    return {'status_code': 400, 'message': '发生错误'}
+        return {'status_code': 200, 'message': '提交注册成功'}
 
 
 """

@@ -24,7 +24,6 @@ from .localsetting import *
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s!ehu^bh@hf)k7q6n42+3atq5bf@jgbln0!vgsgh9!ic4d$=y$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -150,5 +149,18 @@ AUTHENTICATION_SKIP_URL = {
      '/api/user/get_captcha': ['GET'],
      '/captcha.image/': ['GET'],
      '/api/user/validate_captcha': ['POST'],
-     '/api/user/valid_email_code': ['POST']
+     '/api/user/valid_email_code': ['POST'],
+     '/api/user/send_email_code': ['POST']
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",  # Redis服务器地址和数据库编号
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "drq12345."
+        },
+        "KEY_PREFIX": "myapp",  # 可选：为所有缓存键添加前缀
+    }
 }

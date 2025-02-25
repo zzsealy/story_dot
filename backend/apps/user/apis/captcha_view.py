@@ -2,7 +2,7 @@ from ninja import Router, Schema, ModelSchema, Field
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
 
-from utils.cache import cache
+from django.core.cache import cache
 
 router = Router()
 
