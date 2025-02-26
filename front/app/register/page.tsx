@@ -26,7 +26,7 @@ const RegisterForm: React.FC = () => {
   const myOnSubmit: SubmitHandler<FormValues> = (values) => {
     if(!showVerificationCode){
       const sendEmailUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/send_email_code`
-      api.post(sendEmailUrl, {'email': values.email})
+      api.post(sendEmailUrl, {'email': values.email, 'password': values.password, 'repeat_password': values.repeat_password})
         .then((res) => {
           const status_code = res.data.status_code
           if(status_code === 200){

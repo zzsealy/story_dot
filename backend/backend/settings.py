@@ -153,14 +153,15 @@ AUTHENTICATION_SKIP_URL = {
      '/api/user/send_email_code': ['POST']
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",  # Redis服务器地址和数据库编号
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "drq12345."
-        },
-        "KEY_PREFIX": "myapp",  # 可选：为所有缓存键添加前缀
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": f"rediss://{REDIS_HOST}:{REDIS_PORT}/1",  # Redis服务器地址和数据库编号
+#         "OPTIONS": {
+#             'SSL': True,
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#             "PASSWORD": REDIS_PASSWORD,
+#             "SOCKET_CONNECT_TIMEOUT": 10 # 连接超时时间
+#         },
+#     }
+# }
