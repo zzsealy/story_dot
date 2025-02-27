@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django_ratelimit.decorators import ratelimit
 from asgiref.sync import sync_to_async
 from ninja import Router, Schema, ModelSchema, Field
-
+from apps.quiz_user.quiz_user_dal import quiz_user_dal
 
 from utils.email_utils import send_email, get_email_cache_key
 
@@ -42,14 +42,20 @@ class SendEmailCodeOut(Schema):
 
 class SendEmailSchema(Schema):
     email: str
+    send_type: int = None
 
 @ratelimit(key='ip', rate='5/m')
 @router.post('/send_email_code', response=SendEmailCodeOut)
 def send_email_code(request, payload: SendEmailSchema):
+    send_type = payload.send_type if payload.send_type else 'register' 
     email = payload.email
+    if send_type == 'register':
+        exist_user = quiz_user_dal.get_one_by_condition(condition={'username': email})
+        if exist_user:
+            return {'status_code': 500, 'message': '邮箱已经存在, 请您直接登录'}
     exist_email_code = cache.get(key=get_email_cache_key(email=email, type='register'))
     if exist_email_code:
-        return {'satus_code': 500, 'message': '您已经发送邮件啦，请不要重复发送！'}
+        return {'status_code': 500, 'message': '您已经发送邮件啦，请不要重复发送！'}
     ver_code = random.randint(100000, 999999)
     send_email_result = send_email(to_email=email, email_domain_prefix="onboarding", title='感谢注册', message=f'您的注册码是:{str(ver_code)}')
     if send_email_result:

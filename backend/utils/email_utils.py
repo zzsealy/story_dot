@@ -9,18 +9,18 @@ import resend
 resend.api_key = settings.RESEND_API_KEY
 
 def send_email(to_email:str, email_domain_prefix: str, title: str, message: str) -> bool:
-    # r = resend.Emails.send({
-    # "from": f"{email_domain_prefix}@{settings.EMAIL_DOMAIN}",
-    # "to": to_email,
-    # "subject": title,
-    # "html": f"<p>{message}</p>"
-    # })
+    r = resend.Emails.send({
+    "from": f"{email_domain_prefix}@{settings.EMAIL_DOMAIN}",
+    "to": to_email,
+    "subject": title,
+    "html": f"<p>{message}</p>"
+    })
 
-    # id = r.get('id')
-    # if id:
-    #     return True
-    # return False
-    return True
+    id = r.get('id')
+    if id:
+        return True
+    return False
+    # return True
 
 
 def get_email_cache_key(email: str, type: str) -> str:

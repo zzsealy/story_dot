@@ -13,7 +13,6 @@ api.interceptors.request.use(
     (config) => {
     if (config.method === "post" && config.data) {
       // 对请求数据进行加密
-      debugger;
       config.data = { data: encryptData(config.data) };
     }
     const token = typeof window !== "undefined" ? window.localStorage.getItem('todo_token') : null;

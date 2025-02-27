@@ -20,19 +20,29 @@ interface FormValues {
 
 const RegisterForm: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
-  const [showVerificationCode, setShowverificationCode] = useState(false)
+  const [showVerificationCode, setShowVerificationCode] = useState(false)
   const router = useRouter()
 
   const myOnSubmit: SubmitHandler<FormValues> = (values) => {
+    if(values.password.length < 8){
+      toast('请至少输入8位密码')
+      return 
+    }
+    if(values.password !== values.repeat_password){
+      toast('请保证两次密码一致')
+      return 
+    }
     if(!showVerificationCode){
       const sendEmailUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/send_email_code`
       api.post(sendEmailUrl, {'email': values.email, 'password': values.password, 'repeat_password': values.repeat_password})
         .then((res) => {
           const status_code = res.data.status_code
           if(status_code === 200){
-            setShowverificationCode(true)
+            setShowVerificationCode(true)
           } else if(status_code >= 500){
             toast(res.data.message)
+          } else {
+            toast('发生错误')
           }
         })
     } else {
@@ -47,8 +57,10 @@ const RegisterForm: React.FC = () => {
           const status_code = res.data.status_code;
           if (status_code === 200){
               router.push('/login')
-          } else {
+          } else if (status_code >= 500){
             toast(res.data.message)
+          } else {
+            toast('发生错误')
           }
       })
       console.log('Form Submitted:', values);
@@ -68,29 +80,35 @@ const RegisterForm: React.FC = () => {
       </div> */}
 
       <div>
-        <Label htmlFor="email">邮箱</Label>
+        {/* <Label htmlFor="email">邮箱</Label> */}
         <Input
+          className='bg-gray-100'
           id="email"
           type="email"
+          placeholder='邮箱'
           {...register('email', { required: '请输入邮箱' })}
         />
         {errors.email && <span className="text-red-500">{errors.email.message}</span>}
       </div>
 
       <div>
-        <Label htmlFor="password">密码</Label>
+        {/* <Label htmlFor="password">密码</Label> */}
         <Input
+          className='bg-gray-100'
           id="password"
           type="password"
+          placeholder='密码'
           {...register('password', { required: '请输入密码' })}
         />
         {errors.password && <span className="text-red-500">{errors.password.message}</span>}
       </div>
       <div>
-        <Label htmlFor="password">重复密码</Label>
+        {/* <Label htmlFor="password">重复密码</Label> */}
         <Input
+          className='bg-gray-100'
           id="password"
           type="password"
+          placeholder='重复密码'
           {...register('repeat_password', { required: '请输入密码' })}
         />
         {errors.repeat_password && <span className="text-red-500">{errors.repeat_password.message}</span>}
@@ -107,7 +125,7 @@ const RegisterForm: React.FC = () => {
         )
       }
 
-      <Button type="submit" className='bg-green-400'>{ showVerificationCode ? '注册' : '获取验证码'}</Button>
+      <Button type="submit" className='bg-teal-500 w-full' >{ showVerificationCode ? '注册' : '获取验证码'}</Button>
     </form>
   );
 };
@@ -118,11 +136,12 @@ const Register = () => {
 
   return (
     <div className='flex items-center justify-center h-screen bg-gray-100 flex-col'>
-      <div className='flex flex-col space-y-4 w-full max-w-md px-8 py-6 bg-white rounded-lg shadow-md'>
+      <div className='flex flex-col space-y-4 w-full max-w-lg px-10 pt-6 pb-10 bg-white rounded-lg shadow-md'>
 
       {/* <div className='mb-4'>
         <CaptchaForm />
       </div> */}
+      <h1 className='text-center text-4xl pb-4'>复习册</h1>
       <RegisterForm />
       </div>
     </div>
