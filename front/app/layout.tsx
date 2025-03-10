@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Toaster } from 'sonner';
-// import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,9 +33,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Link>
 
           {/* Action Button */}
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-            Sign In
-          </Button>
+
+          <Link href="/register">
+            <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+              注册
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+              登录
+            </Button>
+          </Link>
         </div>
       </nav>
     </header>

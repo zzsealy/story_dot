@@ -8,6 +8,8 @@ from utils.email_utils import send_email, get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
 # from .captcha_view import get_register_ver_code_pass_cache_key
 from apps.quiz_user.quiz_user_dal import quiz_user_dal
+from utils.token_utils import generation_token
+from django.contrib.auth.hashers import make_password, check_password
 
 router = Router()
 
@@ -15,7 +17,7 @@ router = Router()
 注册
 """
 class RegisterOut(Schema):
-    status_code: int
+    code: int
     message: str
 
 class RegisterSchema(Schema):
@@ -35,40 +37,52 @@ def register(request, payload: RegisterSchema):
     password = payload.password
     password_repeat = payload.password_repeat
     if password != password_repeat:
-        return {'status_code': 500, 'message': '两次密码输入不一致，请重新输入'}
+        return {'code': 500, 'message': '两次密码输入不一致，请重新输入'}
     email = payload.email
     exist_user = quiz_user_dal.get_one_by_condition(condition={'username': email})
     if exist_user:
-        return {'status_code': 500, 'message': '邮箱已经存在'}
+        return {'code': 500, 'message': '邮箱已经存在'}
     if '@' not in email:
-        return {'status_code': 500, 'message': '邮箱格式不正确, 请重新输入'}
+        return {'code': 500, 'message': '邮箱格式不正确, 请重新输入'}
     
 
     email = payload.email
     cache_code = cache.get(get_email_cache_key(email=email, type='register'))
     if cache_code is None:
-        return {'status_code': 500, 'message':'验证码不存在，请重新发验证码'}
+        return {'code': 500, 'message':'验证码不存在，请重新发验证码'}
     input_code = payload.ver_code
     if cache_code != input_code:
-        return {'status_code':500, 'message':'验证码错误请重新输入'}
+        return {'code':500, 'message':'验证码错误请重新输入'}
     else:
         cache.delete(get_email_cache_key(email, type='register'))
-        user = quiz_user_dal.model(username=email, create_datetime=datetime.now())
-        user.set_password(payload.password)
+        password = make_password(payload.password)
+        user = quiz_user_dal.model(username=email, password=password, create_datetime=datetime.now())
         user.save()
-        return {'status_code': 200, 'message': '提交注册成功'}
+        return {'code': 200, 'message': '提交注册成功'}
 
 
 """
 登录 
 """
 class LoginSchema(Schema):
-    username: str = Field(None, alias='username')
-    password: str = Field(None, alias='password')
+    # 其实alias是实际要传递的参数
+    email: str = Field(alias='email')
+    password: str = Field(alias='password')
 
-class Out(Schema):
-    token: str
+class LoginOut(Schema):
+    code: int
+    token: str = None
+    message: str
 
-@router.post('/login', response=Out, auth=None)
-def login(request, data: LoginSchema):
-    return {'status': 'ok', 'token': '123132'}
+@router.post('/login', response=LoginOut, auth=None)
+def login(request, payload: LoginSchema):
+    try:
+        quiz_user = quiz_user_dal.get_one_by_condition(condition={'username': payload.email})
+        if quiz_user is None:
+            return {'code': 500, 'message': '邮箱未注册，请先注册'}
+        if check_password(payload.password, quiz_user.get('password')):
+            return {'code': 200, 'message': '登录成功', 'token': generation_token(quiz_user.get('id'))}
+        else:
+            return {'code': 500, 'message': '密码不正确，请重试'}
+    except Exception as e:
+        return {'code': 400, 'message': '发生错误'}

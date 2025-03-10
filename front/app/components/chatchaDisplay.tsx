@@ -13,8 +13,8 @@ const CaptchaDisplay: React.FC<CaptchaDisplayProps> = ({onCaptchaChange}) => {
         const getCaptchaUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/get_captcha`
         axios.get(getCaptchaUrl)
           .then((res) => {
-            const status_code = res.data.status_code
-            if(status_code === 200){
+            const code = res.data.code
+            if(code === 200){
                 const captchaUrl = `${process.env.NEXT_PUBLIC_API_URL}${res.data.captcha_url}`
                 setCaptchaImage(captchaUrl)
                 onCaptchaChange(res.data.captcha_key) // 调用回调函数来通知父组件

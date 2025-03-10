@@ -165,3 +165,5 @@ AUTHENTICATION_SKIP_URL = {
 #         },
 #     }
 # }
+
+TOKEN_AGE = 10  # token 过期时间十天

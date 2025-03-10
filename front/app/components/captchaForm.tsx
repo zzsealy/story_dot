@@ -18,8 +18,8 @@ const CaptchaForm: React.FC = () => {
 
         axios.post(validateCaptchaUrl, {'captcha_key': captchaKey, 'ver_code': values.ver_code})
           .then((res) => {
-            const status_code = res.data.status_code
-            if(status_code===200){
+            const code = res.data.code
+            if(code===200){
                 console.log(res.data)
             }
           })

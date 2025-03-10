@@ -36,10 +36,10 @@ const RegisterForm: React.FC = () => {
       const sendEmailUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user/send_email_code`
       api.post(sendEmailUrl, {'email': values.email, 'password': values.password, 'repeat_password': values.repeat_password})
         .then((res) => {
-          const status_code = res.data.status_code
-          if(status_code === 200){
+          const code = res.data.code
+          if(code === 200){
             setShowVerificationCode(true)
-          } else if(status_code >= 500){
+          } else if(code >= 500){
             toast(res.data.message)
           } else {
             toast('发生错误')
@@ -54,10 +54,10 @@ const RegisterForm: React.FC = () => {
       //   const Context = React.createContext({ name: 'Default' });
       api.post(registerUrl, registerData)
       .then((res) => {
-          const status_code = res.data.status_code;
-          if (status_code === 200){
+          const code = res.data.code;
+          if (code === 200){
               router.push('/login')
-          } else if (status_code >= 500){
+          } else if (code >= 500){
             toast(res.data.message)
           } else {
             toast('发生错误')

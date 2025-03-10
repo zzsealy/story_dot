@@ -10,20 +10,21 @@ const api = axios.create({
 
 //请求拦截器
 api.interceptors.request.use(
-    (config) => {
-    if (config.method === "post" && config.data) {
-      // 对请求数据进行加密
-      config.data = { data: encryptData(config.data) };
-    }
-    const token = typeof window !== "undefined" ? window.localStorage.getItem('todo_token') : null;
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-    },
-    (error) => {
-    return Promise.reject(error);
-    }
+  (config) => {
+  const allowedMethods = ['post', 'put', 'delete', 'patch'];
+  if (config.method && allowedMethods.includes(config.method) && config.data) {
+    // 对请求数据进行加密
+    config.data = { data: encryptData(config.data) };
+  }
+  const token = typeof window !== "undefined" ? window.localStorage.getItem('answer_check_token') : null;
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+  },
+  (error) => {
+  return Promise.reject(error);
+  }
 )
 
 export default api

@@ -11,7 +11,7 @@
 
 # # 获取人机验证码
 # class GetCaptchaOut(Schema):
-#     status_code: int
+#     code: int
 #     captcha_key: str
 #     captcha_url: str
 
@@ -19,7 +19,7 @@
 # def get_captcha(request):
 #     captcha = CaptchaStore.generate_key()
 #     captcha_url = captcha_image_url(captcha)
-#     return {'status_code': 200, 'captcha_key': captcha, 'captcha_url': captcha_url}
+#     return {'code': 200, 'captcha_key': captcha, 'captcha_url': captcha_url}
 
 
 # # 验证验证码
@@ -36,10 +36,10 @@
 #             ip = request.META.get('REMOTE_ADDR')
 #             cache.set(get_register_ver_code_pass_cache_key(ip), True)
 #             captcha.delete()
-#             return {'status_code': 200, 'message': '验证码正确'}
+#             return {'code': 200, 'message': '验证码正确'}
 #         else:
-#             return {'status_code': 400, 'message': '验证码错误'}
+#             return {'code': 400, 'message': '验证码错误'}
 #     except CaptchaStore.DoesNotExist:
-#         return {'status_code': 400, 'message': '验证码无效'}
+#         return {'code': 400, 'message': '验证码无效'}
 
 

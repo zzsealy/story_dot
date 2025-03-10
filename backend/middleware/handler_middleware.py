@@ -15,7 +15,7 @@ class Middleware(MiddlewareMixin):
         login_verify_status = self.verify_login_validity(request)
         request.user_id = login_verify_status['user_id']  # 成功就返回用户的user 否则返回用户的
         if login_verify_status['result'] is False:
-            return JsonResponse({'status_code': 401})
+            return JsonResponse({'code': 401})
         if request.method in ['POST', 'PUT', 'PATCH']:
             try:
                 # 获取加密的 data 字段
@@ -30,9 +30,9 @@ class Middleware(MiddlewareMixin):
                         request.POST = request.POST.copy()
                         request.POST.update(decrypted_data)
                     else:
-                        return JsonResponse({'status_code': 400, 'message': 'Invalid data'}, status=400)
+                        return JsonResponse({'code': 400, 'message': 'Invalid data'}, status=400)
             except json.JSONDecodeError:
-                return JsonResponse({'status_code': 400, 'message': 'Invalid JSON'}, status=400)
+                return JsonResponse({'code': 400, 'message': 'Invalid JSON'}, status=400)
         response = self.get_response(request)
         return response
         # return JsonResponse(data={"susscess":0, "message":"记录事件开始到数据库出错"}, content_type='application/json', status=401)
