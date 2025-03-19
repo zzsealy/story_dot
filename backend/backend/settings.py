@@ -139,7 +139,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'quiz_user.QuizUser'
+AUTH_USER_MODEL = 'customer_user.CustomerUser'
 
 AUTHENTICATION_SKIP_URL = {
      '/api/user/register': ['POST'],

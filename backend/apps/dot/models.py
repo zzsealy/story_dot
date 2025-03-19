@@ -1,12 +1,12 @@
 from django.db import models
 
-from apps.customer_user.models import QuizUser
+from apps.customer_user.models import CustomerUser
 
 # Create your models here.
 
 class Dot(models.Model):
     user = models.ForeignKey(
-        QuizUser,
+        CustomerUser,
         on_delete=models.CASCADE,
         verbose_name='作者',
         related_name='dot_s'
@@ -20,7 +20,7 @@ class Dot(models.Model):
 
 class DotDetail(models.Model):
     user = models.ForeignKey(
-        QuizUser,
+        CustomerUser,
         on_delete=models.CASCADE,
         verbose_name='作者',
         related_name='dot_details'
@@ -41,7 +41,7 @@ class DotDetail(models.Model):
 # class QuizCategory(models.Model):
 #     name = models.CharField(max_length=50, verbose_name='题目分类')
 #     quiz_user = models.ForeignKey(
-#         QuizUser,
+#         CustomerUser,
 #         on_delete=models.CASCADE,
 #         verbose_name='作者',
 #         related_name='quiz_categories'
@@ -58,7 +58,7 @@ class DotDetail(models.Model):
 
 # class Quiz(models.Model):
 #     user = models.ForeignKey(
-#         QuizUser,
+#         CustomerUser,
 #         on_delete=models.CASCADE,
 #         verbose_name='作者',
 #         related_name='quiz_s'
