@@ -6,10 +6,9 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import api from '../../utils/axios';
 
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { debug } from 'console';
+import Link from 'next/link';
 
 interface FormValues {
   email: string
@@ -48,7 +47,7 @@ const LoginForm: React.FC = () => {
           id="email"
           type="email"
           placeholder='邮箱'
-          {...register('email', { required: 'Password is required' })}
+          {...register('email', { required: 'Email is required' })}
         />
         {errors.email && <span className="text-red-500">{errors.email.message}</span>}
       </div>
@@ -79,9 +78,14 @@ const Login = () => {
         <h1 className='text-center text-4xl pb-4'>复习册</h1>
         < LoginForm />
         <div className='mt-4 flex bg-gray-100 w-full h-10 items-center '>
-            <button type='submit' className='text-gray-500'>注册 </button>
-            <span className='text-gray-300'>|</span>
-            <button type='submit' className='text-gray-500'> 忘记密码</button>
+            <Link href='/register'>
+              <button type='submit' className='text-gray-500'>注册 </button>
+            </Link>
+              <span className='text-gray-300'>|</span>
+            <Link href='/forgot_password'>            
+              <button type='submit' className='text-gray-500'> 忘记密码</button>
+            </Link>
+
         </div>
       </div>
     </div>
