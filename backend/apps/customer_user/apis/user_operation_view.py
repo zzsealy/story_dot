@@ -7,7 +7,7 @@ from django.core.cache import cache
 from utils.email_utils import send_email, get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
 # from .captcha_view import get_register_ver_code_pass_cache_key
-from apps.customer_user.quiz_user_dal import quiz_user_dal
+from apps.customer_user.customer_user_dal import customer_user_dal
 from utils.token_utils import generation_token
 from django.contrib.auth.hashers import make_password, check_password
 

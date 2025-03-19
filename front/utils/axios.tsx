@@ -16,7 +16,7 @@ api.interceptors.request.use(
     // 对请求数据进行加密
     config.data = { data: encryptData(config.data) };
   }
-  const token = typeof window !== "undefined" ? window.localStorage.getItem('answer_check_token') : null;
+  const token = typeof window !== "undefined" ? window.localStorage.getItem('story_dot_token') : null;
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }

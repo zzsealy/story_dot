@@ -32,4 +32,4 @@ api = NinjaAPI()
 #     return f'hello {data.name}'
 
 api.add_router('/user', user_router)
-api.add_router('/dots', dot_router)
+api.add_router('/dot', dot_router)

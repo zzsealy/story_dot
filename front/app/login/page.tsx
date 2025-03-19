@@ -27,7 +27,7 @@ const LoginForm: React.FC = () => {
           const code = res.data.code;
           if (code === 200) {
               const token = res.data.token;
-              localStorage.setItem('answer_check_token', token)
+              localStorage.setItem('story_dot_token', token)
               router.push('/')
           } else if (code >= 500){
             toast(res.data.message)
