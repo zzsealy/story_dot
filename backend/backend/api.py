@@ -1,5 +1,6 @@
 from ninja import NinjaAPI, Schema, Router
-from apps.quiz_user.router import user_router
+from apps.customer_user.router import user_router
+from apps.dot.router import dot_router
 
 api = NinjaAPI()
 
@@ -31,3 +32,4 @@ api = NinjaAPI()
 #     return f'hello {data.name}'
 
 api.add_router('/user', user_router)
+api.add_router('/dots', dot_router)

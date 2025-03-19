@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'corsheaders',
     # 'captcha',
-    'apps.quiz_user',
-    'apps.quiz'
+    'apps.customer_user',
+    'apps.dot'
 ]
 
 MIDDLEWARE = [
