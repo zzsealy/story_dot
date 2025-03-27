@@ -36,7 +36,6 @@ async def valid_email_code(request, payload:ValidEmailSchema):
 
 class SendEmailCodeOut(Schema):
     code: int
-    message: str
 
 
 class SendEmailSchema(Schema):
