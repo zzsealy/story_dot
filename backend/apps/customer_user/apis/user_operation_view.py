@@ -18,7 +18,6 @@ router = Router()
 """
 class RegisterOut(Schema):
     code: int
-    message: str
 
 class RegisterSchema(Schema):
     email: str = Field(description='邮箱')
@@ -37,28 +36,28 @@ def register(request, payload: RegisterSchema):
     password = payload.password
     password_repeat = payload.password_repeat
     if password != password_repeat:
-        return {'code': 500, 'message': '两次密码输入不一致，请重新输入'}
+        return {'code': 505}
     email = payload.email
-    exist_user = quiz_user_dal.get_one_by_condition(condition={'username': email})
+    exist_user = customer_user_dal.get_one_by_condition(condition={'username': email})
     if exist_user:
-        return {'code': 500, 'message': '邮箱已经存在'}
+        return {'code': 506}
     if '@' not in email:
-        return {'code': 500, 'message': '邮箱格式不正确, 请重新输入'}
+        return {'code': 507}
     
 
     email = payload.email
     cache_code = cache.get(get_email_cache_key(email=email, type='register'))
     if cache_code is None:
-        return {'code': 500, 'message':'验证码不存在，请重新发验证码'}
+        return {'code': 508}
     input_code = payload.ver_code
     if cache_code != input_code:
-        return {'code':500, 'message':'验证码错误请重新输入'}
+        return {'code':509}
     else:
         cache.delete(get_email_cache_key(email, type='register'))
         password = make_password(payload.password)
-        user = quiz_user_dal.model(username=email, password=password, create_datetime=datetime.now())
+        user = customer_user_dal.model(username=email, password=password, create_datetime=datetime.now())
         user.save()
-        return {'code': 200, 'message': '提交注册成功'}
+        return {'code': 200}
 
 
 """
@@ -72,17 +71,16 @@ class LoginSchema(Schema):
 class LoginOut(Schema):
     code: int
     token: str = None
-    message: str
 
 @router.post('/login', response=LoginOut, auth=None)
 def login(request, payload: LoginSchema):
     try:
-        quiz_user = quiz_user_dal.get_one_by_condition(condition={'username': payload.email})
+        quiz_user = customer_user_dal.get_one_by_condition(condition={'username': payload.email})
         if quiz_user is None:
-            return {'code': 500, 'message': '邮箱未注册，请先注册'}
+            return {'code': 510}
         if check_password(payload.password, quiz_user.get('password')):
-            return {'code': 200, 'message': '登录成功', 'token': generation_token(quiz_user.get('id'))}
+            return {'code': 200, 'token': generation_token(quiz_user.get('id'))}
         else:
-            return {'code': 500, 'message': '密码不正确，请重试'}
+            return {'code': 511}
     except Exception as e:
-        return {'code': 400, 'message': '发生错误'}
+        return {'code': 500}

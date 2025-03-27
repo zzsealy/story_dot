@@ -13,9 +13,9 @@ export default function HomePage() {
   const getStoryDots = () => {
       api.get(backendUrl.getUserStoryDotUrl)
       .then((res) => {
-        if(res.data.status_code === 200){
+        if(res.data.code === 200){
           setStoryDotList(res.data.story_dot_list)
-        } else if(res.data.status_code == 401){
+        } else if(res.data.code == 401){
           router.push('/login')
         } else {
           toast('发生错误 请稍后重试')

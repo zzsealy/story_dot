@@ -128,7 +128,6 @@ except Exception as e:
     CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
       
 
-TOKEN_AGE = 10
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

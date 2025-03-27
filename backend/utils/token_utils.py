@@ -1,4 +1,4 @@
-import datetime, jwt, time
+import jwt, time
 from django.conf import settings
 
 

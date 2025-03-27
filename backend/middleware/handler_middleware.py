@@ -2,12 +2,13 @@ import base64
 import datetime
 import json, time
 
-from django.conf import settings
-from django.utils.timezone import localtime
-from django.utils.deprecation import MiddlewareMixin
-from django.http import JsonResponse
-from utils.login_status_utils import generation_token,  verify_bearer_token
 from Crypto.Cipher import AES
+from django.conf import settings
+from django.http import JsonResponse
+from django.utils.deprecation import MiddlewareMixin
+
+from common.message_info import MESSAGE_DICT
+from utils.login_status_utils import generation_token,  verify_bearer_token
 
 class Middleware(MiddlewareMixin):
 
@@ -34,21 +35,8 @@ class Middleware(MiddlewareMixin):
             except json.JSONDecodeError:
                 return JsonResponse({'code': 400, 'message': 'Invalid JSON'}, status=400)
         response = self.get_response(request)
-        return response
-        # return JsonResponse(data={"susscess":0, "message":"记录事件开始到数据库出错"}, content_type='application/json', status=401)
+        return self.process_response(request, response)
     
-    # def decrypt_data(self, encrypted_data):
-    #     """解密数据"""
-    #     try:
-    #         key = base64.b64decode(settings.ENCRYPTION_KEY)
-    #         cipher = AES.new(key, AES.MODE_ECB)
-    #         decrypted_data = cipher.decrypt(base64.b64decode(encrypted_data)).strip()
-    #         decrypted_data = json.loads(decrypted_data.decode('utf-8'))
-    #         return decrypted_data
-    #     except Exception as e:
-    #         print(f"Decryption failed: {e}")
-    #         return None
-        
     @staticmethod
     def unpad(data):
         """移除 PKCS7 填充字节"""
@@ -105,3 +93,37 @@ class Middleware(MiddlewareMixin):
         if exp_time > (time.time()):
             return False
         return True
+    
+    def process_response(self, request, response):
+        # 仅处理 JsonResponse
+        try:
+            data = json.loads(response.content)
+        except json.JSONDecodeError:
+            return response
+
+        # 获取语言类型
+        lang = self._get_request_language(request)
+        # 根据 code 添加或覆盖 message
+        code = data.get('code')
+        if code is not None:
+            message = self._get_message(code, lang)
+            data['message'] = message
+            response.content = json.dumps(data)
+        return response
+
+    def _get_request_language(self, request):
+        """从请求参数或头中解析语言类型"""
+        # 优先级：请求参数 > Accept-Language 头
+        lang = request.GET.get('lang')
+        if not lang:
+            accept_language = request.META.get('HTTP_ACCEPT_LANGUAGE', 'en')
+            lang = accept_language.split(',')[0].split(';')[0].strip().lower()
+        # 简化为支持 'en' 或 'zh'
+        return 'zh' if lang.startswith('zh') else 'en'
+
+    def _get_message(self, code, lang):
+        """根据错误码和语言返回文案"""
+        try:
+            return MESSAGE_DICT.get(code, 'Unknown error').get(lang)
+        except Exception as e:
+            return 'success' if lang == 'en' else '操作成功'
