@@ -1,12 +1,9 @@
-import random
-import asyncio
 from datetime import datetime
-from asgiref.sync import sync_to_async
+from rest_framework.decorators import api_view
 
 from django.core.cache import cache
-from utils.email_utils import send_email, get_email_cache_key
+from utils.email_utils import get_email_cache_key
 from ninja import Router, Schema, ModelSchema, Field
-# from .captcha_view import get_register_ver_code_pass_cache_key
 from apps.customer_user.customer_user_dal import customer_user_dal
 from utils.token_utils import generation_token
 from django.contrib.auth.hashers import make_password, check_password

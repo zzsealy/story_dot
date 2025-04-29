@@ -1,10 +1,8 @@
 import random
 
-from django.core import signing 
 from django.core.cache import cache
 from django_ratelimit.decorators import ratelimit
-from asgiref.sync import sync_to_async
-from ninja import Router, Schema, ModelSchema, Field
+from ninja import Router, Schema
 from apps.customer_user.customer_user_dal import customer_user_dal
 
 from utils.email_utils import send_email, get_email_cache_key

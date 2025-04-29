@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import sys
 from pathlib import Path
+import os
 from .localsetting import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,6 +27,12 @@ from .localsetting import *
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
+BASE_DIR = Path(__file__).resolve().parent.parent
+APPS_FATHER_DIR = Path(__file__).resolve().parent
+sys.path.insert(0,os.path.join(APPS_FATHER_DIR, "apps"))
+sys.path.insert(0,os.path.join(APPS_FATHER_DIR, "middleware"))
+PROJECT_DIR = Path(__file__).resolve().parent
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -44,7 +51,8 @@ INSTALLED_APPS = [
     'corsheaders',
     # 'captcha',
     'apps.customer_user',
-    'apps.dot'
+    'apps.dot',
+    'apps.user'
 ]
 
 MIDDLEWARE = [
