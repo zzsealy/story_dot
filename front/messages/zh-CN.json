@@ -1,0 +1,23 @@
+{
+    "Navigation": {
+        "site_name": "我的网站",
+        "nav_home": "首页",
+        "nav_about": "关于我们",
+        "nav_services": "服务",
+        "nav_contact": "联系方式",
+        "nav_register": "注册",
+        "nav_login": "登录"
+    },
+    "IndexPage": {
+        "title": "欢迎！",
+        "description": "这是一个使用 Next.js 和 next-intl 构建的多语言网站示例。"
+    },
+    "AboutPage": {
+        "title": "关于我们页面",
+        "content": "了解更多关于我们公司的信息。"
+    },
+    "LocaleSwitcher": {
+        "label": "选择语言",
+        "locale": "{locale, select, en {English} zh-CN {简体中文} fr {Français} other {未知}}"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "Navigation": {
+        "site_name": "MyWebsite",
+        "nav_home": "Home",
+        "nav_about": "About",
+        "nav_services": "Services",
+        "nav_contact": "Contact",
+        "nav_register": "Register",
+        "nav_login": "Login"
+    },
+    "IndexPage": {
+        "title": "Welcome!",
+        "description": "This is an example multilingual website built with Next.js and next-intl."
+    },
+    "AboutPage": {
+        "title": "About Us Page",
+        "content": "Learn more about our company."
+    },
+    "LocaleSwitcher": {
+        "label": "Select Language",
+        "locale": "{locale, select, en {English} zh-CN {简体中文} fr {Français} other {Unknown}}"
+    }
+}

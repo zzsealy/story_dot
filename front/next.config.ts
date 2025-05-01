@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -14,8 +15,12 @@ const nextConfig: NextConfig = {
   // ]
   // },
   images: {
-    domains: [process.env.domain || '127.0.0.1']
-  }
+    domains: [process.env.domain || "127.0.0.1"],
+  },
+  // i18n: {
+  //   locales: ["en", "zh-CN"],
+  //   defaultLocale: "zh-CN",
+  // },
 };
-
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+export default withNextIntl(nextConfig);
